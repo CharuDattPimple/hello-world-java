@@ -49,7 +49,7 @@ pipeline{
 	 }//end of steps
    }//end of stage
  }//end of stages
- post{
+ // post{
      // always{
 		// emailext(
             // to: '$DEFAULT_RECIPIENTS',
@@ -68,5 +68,5 @@ pipeline{
       //failure{
         //sendEmail('$DEFAULT_RECIPIENTS', null, "Build Failed", '''${SCRIPT, template="custom-html.template"}''') 
       //}
-    } // end of post
+    //} // end of post
 }//end of Pipeline
