@@ -1,25 +1,26 @@
 pipeline{
- agent	 any
-   options {
-	  skipDefaultCheckout()
-	}
- tools {
-        maven 'Maven'
-	jdk 'JAVA_HOME'
+ agent  any
+  tools {
+        // Install the Maven version configured as "M3" and add it to the path.
+        maven "Maven"
+        jdk "JAVA_HOME"
     }
+   options {
+  skipDefaultCheckout()
+ }
  environment {
-	   BLD_STATUS = '$BUILD_STATUS'
-	   PRJ_NAME = '$PROJECT_NAME'
+    BLD_STATUS = '$BUILD_STATUS'
+    PRJ_NAME = '$PROJECT_NAME'
  }// end of environment
  stages{
-	  stage('CleanWorkspace') {
+   stage('CleanWorkspace') {
             steps {
                 cleanWs()
             }
         }
    stage("Checkout Source"){
      steps{
-	    checkout(
+     checkout(
                     changelog: false,
                     poll: false,
                     scm: [
@@ -33,31 +34,46 @@ pipeline{
                         submoduleCfg: [],
                         userRemoteConfigs: [
                             [
-                                url: 'https://github.com/venh/hello-world-java.git'				    
+                                url: 'https://github.com/venh/hello-world-java.git'        
                             ]
                         ]
                     ]
                 )
-	 }//end of steps
-   }//end of stage 
+  }//end of steps
+   }//end of stage
    stage("Compile"){
      steps{
-		 echo "Compilation..."
-	    script{
-			sh "mvn clean package"
-		}//end of script
-	 }//end of steps
+   echo "Compilation..."
+     script{
+   sh "mvn clean package"
+  }//end of script
+  }//end of steps
    }//end of stage
  }//end of stages
  post{
-      success {
-         script {
-	    bat "java -cp target/helloworld-1.1.jar com.demo.helloworld.HelloWorld"
-	 }
+ success{
+  script{
+ sh "java -cp target/helloworld-1.1.jar com.demo.helloworld.HelloWorld"
+ }
+ }
+      always{
+  // emailext(
+            // to: '$DEFAULT_RECIPIENTS',
+            // subject: "[${env.BLD_STATUS}] - ${env.PRJ_NAME} - Build # ${BUILD_NUMBER} ($BUILD_ID)",
+            // body: '''${SCRIPT, template="custom-html.template"}''',
+            // recipientProviders: [culprits(),
+                     // developers(),
+                     // requestor(),
+                     // brokenBuildSuspects(),
+                     // brokenTestsSuspects(),
+                     // upstreamDevelopers()
+                     // ]
+        // )
+ // sendEmail('$DEFAULT_RECIPIENTS', null, "[${env.BLD_STATUS}] - ${env.PRJ_NAME} - Build # ${BUILD_NUMBER} ($BUILD_ID)", '''${SCRIPT, template="custom-html.template"}''') 
+ printMsg("$JOB_BASE_NAME")
       }
-      always{		
-	  //sendEmail('$DEFAULT_RECIPIENTS', null, "[${env.BLD_STATUS}] - ${env.PRJ_NAME} - Build # ${BUILD_NUMBER} ($BUILD_ID)", '''${SCRIPT, template="custom-html.template"}''') 
-	  printMsg("$JOB_BASE_NAME")
-      }
+      //failure{
+        //sendEmail('$DEFAULT_RECIPIENTS', null, "Build Failed", '''${SCRIPT, template="custom-html.template"}''') 
+      //}
     } // end of post
 }//end of Pipeline
