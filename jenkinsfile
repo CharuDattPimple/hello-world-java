@@ -4,6 +4,9 @@ pipeline{
    options {
 		skipDefaultCheckout()
 	}
+   tools {
+   		maven "Maven"
+	}
  environment {
 	   BLD_STATUS = '$BUILD_STATUS'
 	   PRJ_NAME = '$PROJECT_NAME'
