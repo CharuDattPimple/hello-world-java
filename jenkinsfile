@@ -50,7 +50,7 @@ pipeline{
    }//end of stage
  }//end of stages
  post{
-      always{
+     // always{
 		// emailext(
             // to: '$DEFAULT_RECIPIENTS',
             // subject: "[${env.BLD_STATUS}] - ${env.PRJ_NAME} - Build # ${BUILD_NUMBER} ($BUILD_ID)",
@@ -64,7 +64,7 @@ pipeline{
                      // ]
         // )
 		// sendEmail('$DEFAULT_RECIPIENTS', null, "[${env.BLD_STATUS}] - ${env.PRJ_NAME} - Build # ${BUILD_NUMBER} ($BUILD_ID)", '''${SCRIPT, template="custom-html.template"}''') 
-      }
+      //}
       //failure{
         //sendEmail('$DEFAULT_RECIPIENTS', null, "Build Failed", '''${SCRIPT, template="custom-html.template"}''') 
       //}
