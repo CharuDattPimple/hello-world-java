@@ -4,7 +4,8 @@ pipeline{
 	  skipDefaultCheckout()
 	}
  tools {
-        maven 'Maven' 
+        maven 'Maven'
+	jdk 'JAVA_HOME'
     }
  environment {
 	   BLD_STATUS = '$BUILD_STATUS'
