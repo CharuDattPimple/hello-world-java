@@ -13,11 +13,6 @@ pipeline{
     PRJ_NAME = '$PROJECT_NAME'
  }// end of environment
  stages{
-   stage('CleanWorkspace') {
-            steps {
-                cleanWs()
-            }
-        }
    stage("Checkout Source"){
      steps{
      checkout(
